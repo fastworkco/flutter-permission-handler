@@ -53,7 +53,8 @@ class Permission {
   /// iOS: Nothing
   static const phone = PermissionWithService._(8);
 
-  /// Android: Nothing
+  /// When running on Android T and above: Photos
+  /// When running on Android < T: Nothing
   /// iOS: Photos
   /// iOS 14+ read & write access level
   static const photos = Permission._(9);
@@ -103,6 +104,16 @@ class Permission {
   /// The unknown only used for return type, never requested
   static const unknown = Permission._(20);
 
+  /// When running on Android T and above: Videos
+  /// When running on Android < T: Nothing
+  /// iOS: Nothing
+  static const videos = Permission._(21);
+
+  /// When running on Android T and above: Audio files
+  /// When running on Android < T: Nothing
+  /// iOS: Nothing
+  static const audio = Permission._(22);
+
   /// Returns a list of all possible [PermissionGroup] values.
   static const List<Permission> values = <Permission>[
     calendar,
@@ -126,6 +137,8 @@ class Permission {
     accessMediaLocation,
     activityRecognition,
     unknown,
+    videos,
+    audio,
   ];
 
   static const List<String> _names = <String>[
@@ -150,6 +163,8 @@ class Permission {
     'access_media_location',
     'activity_recognition',
     'unknown',
+    'videos',
+    'audio',
   ];
 
   @override
