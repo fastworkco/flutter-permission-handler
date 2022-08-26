@@ -16,12 +16,18 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.1.6
-  permission_handler_platform_interface:
-    path: ../permission_handler_platform_interface/
+  permission_handler_platform_interface: ^2.0.2
 
 dev_dependencies:
   effective_dart: ^1.2.1
   plugin_platform_interface: ^1.0.1
+
+dependency_overrides:
+  permission_handler_platform_interface:
+    git:
+      url: git@github.com:fastworkco/flutter-permission-handler.git
+      ref: 45a505271e9217280a868c0ec8c07a4a686bfb36
+      path: permission_handler_platform_interface
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
