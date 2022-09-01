@@ -69,7 +69,8 @@ public class PermissionUtils {
                 return PermissionConstants.PERMISSION_GROUP_VIDEOS;
             case Manifest.permission.READ_MEDIA_AUDIO:
                 return PermissionConstants.PERMISSION_GROUP_AUDIO;
-            
+            case Manifest.permission.MANAGE_EXTERNAL_STORAGE:
+                return PermissionConstants.PERMISSION_GROUP_MANAGE_EXTERNAL_STORAGE;
             default:
                 return PermissionConstants.PERMISSION_GROUP_UNKNOWN;
         }
@@ -227,6 +228,12 @@ public class PermissionUtils {
                 // not handle permissions on pre Android 13 devices.
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && hasPermissionInManifest(context, permissionNames, Manifest.permission.READ_MEDIA_AUDIO ))
                     permissionNames.add(Manifest.permission.READ_MEDIA_AUDIO);
+                break;
+             case PermissionConstants.PERMISSION_GROUP_MANAGE_EXTERNAL_STORAGE:
+                // The MANAGE_EXTERNAL_STORAGE permission is introduced in Android R, meaning we should
+                // not handle permissions on pre Android R devices.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && hasPermissionInManifest(context, permissionNames, Manifest.permission.MANAGE_EXTERNAL_STORAGE ))
+                    permissionNames.add(Manifest.permission.MANAGE_EXTERNAL_STORAGE);
                 break;
             case PermissionConstants.PERMISSION_GROUP_REMINDERS:
             case PermissionConstants.PERMISSION_GROUP_UNKNOWN:
