@@ -24,6 +24,7 @@ class PermissionList extends StatelessWidget {
                   return permission != Permission.unknown &&
                       permission != Permission.mediaLibrary &&
                       permission != Permission.photos &&
+                      permission != Permission.videos &&
                       permission != Permission.reminders;
                 }
               })
