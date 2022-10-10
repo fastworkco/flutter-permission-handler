@@ -159,7 +159,7 @@ final class PermissionManager {
             @Nullable Activity activity) {
 
         if (permission == PermissionConstants.PERMISSION_GROUP_NOTIFICATION) {
-            return checkNotificationPermissionStatus(context);
+            return checkNotificationPermissionStatus(context, activity);
         }
 
         final List<String> names = PermissionUtils.getManifestNames(context, permission);
@@ -246,19 +246,29 @@ final class PermissionManager {
         successCallback.onSuccess(ActivityCompat.shouldShowRequestPermissionRationale(activity, names.get(0)));
     }
 
-    private int checkNotificationPermissionStatus(Context context) {
+    private int checkNotificationPermissionStatus(Context context, Activity activity) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             NotificationManagerCompat manager = NotificationManagerCompat.from(context);
             boolean isGranted = manager.areNotificationsEnabled();
             if (isGranted) {
                 return PermissionConstants.PERMISSION_STATUS_GRANTED;
             }
+            return PermissionConstants.PERMISSION_STATUS_NEVER_ASK_AGAIN;
+        }
+        final int permissionStatus = context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS);
+        if (permissionStatus == PackageManager.PERMISSION_DENIED) {
+            if (!PermissionUtils.getRequestedPermissionBefore(context, Manifest.permission.POST_NOTIFICATIONS)) {
+                return PermissionConstants.PERMISSION_STATUS_NOT_DETERMINED;
+            } else if (PermissionUtils.isNeverAskAgainSelected(activity, Manifest.permission.POST_NOTIFICATIONS)) {
+                return PermissionConstants.PERMISSION_STATUS_NEVER_ASK_AGAIN;
+            } else {
+                return PermissionConstants.PERMISSION_STATUS_DENIED;
+            }
+        } else if (permissionStatus != PackageManager.PERMISSION_GRANTED) {
             return PermissionConstants.PERMISSION_STATUS_DENIED;
         }
+        return PermissionConstants.PERMISSION_STATUS_NOT_DETERMINED;
 
-        return context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-            ? PermissionConstants.PERMISSION_STATUS_GRANTED
-            : PermissionConstants.PERMISSION_STATUS_DENIED;
     }
 
     @VisibleForTesting
